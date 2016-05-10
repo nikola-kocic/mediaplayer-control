@@ -1,0 +1,8 @@
+[package]
+name = "mediaplayer-control"
+version = "0.1.0"
+authors = ["Nikola Kocić <nikolakocic@gmail.com>"]
+
+[dependencies]
+dbus = "0.3.3"
+clap = "2.4.3"
