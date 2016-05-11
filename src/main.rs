@@ -36,11 +36,13 @@ fn main() {
         .about("Controls Media Player using DBus protocol")
         .arg(Arg::with_name("player")
             .long("player")
+            .short("p")
             .help("Sets the player to use")
             .takes_value(true)
             .required(true))
         .arg(Arg::with_name("command")
             .long("command")
+            .short("c")
             .help("Sets the command to execute: \
                    Next, Previous, Pause, PlayPause, Stop, Play, \
                    Seek(nanoseconds), OffsetVolume(0.0 - 1.0)")
@@ -48,9 +50,15 @@ fn main() {
             .required(true))
         .arg(Arg::with_name("arg")
             .long("arg")
+            .short("a")
             .help("Sets the command argument")
             .takes_value(true)
             .required(false))
+        .after_help(r#"
+Examples:
+    mediaplayer-control --player audacious --command Next
+    mediaplayer-control --player audacious --command Seek --arg="-5000000"
+    mediaplayer-control -p audacious -c OffsetVolume -a="-0.025""#)
         .get_matches();
 
     let player = matches.value_of("player").unwrap();
