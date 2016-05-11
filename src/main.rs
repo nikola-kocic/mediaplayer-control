@@ -42,9 +42,8 @@ fn main() {
         .arg(Arg::with_name("command")
             .long("command")
             .help("Sets the command to execute: \
-                   PlayPause, Pause, Next, Previous, \
-                   SeekForward(nanoseconds), SeekBackward(nanoseconds), \
-                   VolumeUp(0-1), VolumeDown(0-1)")
+                   Next, Previous, Pause, PlayPause, Stop, Play, \
+                   Seek(nanoseconds), OffsetVolume(0.0 - 1.0)")
             .takes_value(true)
             .required(true))
         .arg(Arg::with_name("arg")
@@ -59,19 +58,17 @@ fn main() {
     let c = Connection::get_private(BusType::Session).unwrap();
     let dest = "org.mpris.MediaPlayer2.".to_string() + player;
     let missing_arg_message = format!("No argument for {} command", command);
-    if command == "VolumeUp" {
-        let arg = value_t!(matches, "arg", f64).expect(&missing_arg_message);
-        offset_volume(&c, &dest, arg);
-    } else if command == "VolumeDown" {
-        let arg = value_t!(matches, "arg", f64).expect(&missing_arg_message);
-        offset_volume(&c, &dest, -arg);
-    } else if command == "SeekForward" {
-        let arg = value_t!(matches, "arg", i64).expect(&missing_arg_message);
-        action(&c, &dest, "Seek", Some(MessageItem::Int64(arg)));
-    } else if command == "SeekBackward" {
-        let arg = value_t!(matches, "arg", i64).expect(&missing_arg_message);
-        action(&c, &dest, "Seek", Some(MessageItem::Int64(-arg)));
-    } else {
-        action(&c, &dest, command, None);
+    match command {
+        "OffsetVolume" => {
+            let arg = value_t!(matches, "arg", f64).expect(&missing_arg_message);
+            offset_volume(&c, &dest, arg);
+        }
+        "Seek" => {
+            let arg = value_t!(matches, "arg", i64).expect(&missing_arg_message);
+            action(&c, &dest, command, Some(MessageItem::Int64(arg)));
+        }
+        _ => {
+            action(&c, &dest, command, None);
+        }
     }
 }
