@@ -1,8 +1,10 @@
 [package]
 name = "mediaplayer-control"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Nikola Kocić <nikolakocic@gmail.com>"]
 
 [dependencies]
-dbus = "0.3.3"
-clap = "2.4.3"
+dbus = "0.6.4"
+chrono = "0.4.7"
+clap = "2.33.0"
+floating-duration = "0.1.2"
